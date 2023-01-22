@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using QOptions.Models.Common;
 using QOptions.Models.Query;
 using System.Linq.Expressions;
@@ -19,7 +19,8 @@ public static class QueryExtensions
     /// <param name="queryOptions">Query options</param>
     /// <typeparam name="TEntity">Query source type</typeparam>
     /// <returns>Queryable source</returns>
-    public static IQueryable<TEntity> ApplyQuery<TEntity>(this IQueryable<TEntity> source, IEntityQueryOptions<TEntity> queryOptions) where TEntity : class, IEntity
+    public static IQueryable<TEntity> ApplyQuery<TEntity>(this IQueryable<TEntity> source, IEntityQueryOptions<TEntity> queryOptions)
+        where TEntity : class, IEntity
     {
         if (source == null || queryOptions == null)
             throw new ArgumentNullException();
@@ -78,7 +79,8 @@ public static class QueryExtensions
     /// <param name="queryOptions">Query options</param>
     /// <typeparam name="TSource">Query source type</typeparam>
     /// <returns>Queryable source</returns>
-    public static IEnumerable<TSource> ApplyQuery<TSource>(this IEnumerable<TSource> source, IQueryOptions<TSource> queryOptions) where TSource : class
+    public static IEnumerable<TSource> ApplyQuery<TSource>(this IEnumerable<TSource> source, IQueryOptions<TSource> queryOptions)
+        where TSource : class
     {
         if (source == null || queryOptions == null)
             throw new ArgumentNullException();
@@ -120,16 +122,17 @@ public static class QueryExtensions
 
         // Add searchable properties
         var predicates = searchableProperties?.Select(x =>
-        {
-            // Create predicate expression
-            var member = Expression.PropertyOrField(parameter, x.Name);
+            {
+                // Create predicate expression
+                var member = Expression.PropertyOrField(parameter, x.Name);
 
-            // Create specific expression based on type
-            var compareMethod = x.PropertyType.GetCompareMethod(true);
-            var argument = Expression.Constant(searchOptions.Keyword, x.PropertyType);
-            var methodCaller = Expression.Call(member, compareMethod!, argument);
-            return Expression.Lambda<Func<TSource, bool>>(methodCaller, parameter);
-        }).ToList();
+                // Create specific expression based on type
+                var compareMethod = x.PropertyType.GetCompareMethod(true);
+                var argument = Expression.Constant(searchOptions.Keyword, x.PropertyType);
+                var methodCaller = Expression.Call(member, compareMethod!, argument);
+                return Expression.Lambda<Func<TSource, bool>>(methodCaller, parameter);
+            })
+            .ToList();
 
         // Join predicate expressions
         var finalExpression = PredicateBuilder<TSource>.False;
@@ -270,8 +273,10 @@ public static class QueryExtensions
     /// <param name="filterOptions">Filter options</param>
     /// <typeparam name="TSource">Query source type</typeparam>
     /// <returns>Queryable source</returns>
-    public static IQueryable<TSource> Filter<TSource>(this IQueryable<TSource> source, FilterOptions<TSource> filterOptions) where TSource : class =>
-        source.Where(filterOptions.GetFilterExpression());
+    public static IQueryable<TSource> Filter<TSource>(this IQueryable<TSource> source, FilterOptions<TSource> filterOptions) where TSource : class
+    {
+        return source.Where(filterOptions.GetFilterExpression());
+    }
 
     /// <summary>
     /// Applies given filter options to query source
@@ -280,8 +285,10 @@ public static class QueryExtensions
     /// <param name="filterOptions">Filter options</param>
     /// <typeparam name="TSource">Query source type</typeparam>
     /// <returns>Queryable source</returns>
-    public static IEnumerable<TSource> Filter<TSource>(this IEnumerable<TSource> source, FilterOptions<TSource> filterOptions) where TSource : class =>
-        source.Where(filterOptions.GetFilterExpression().Compile());
+    public static IEnumerable<TSource> Filter<TSource>(this IEnumerable<TSource> source, FilterOptions<TSource> filterOptions) where TSource : class
+    {
+        return source.Where(filterOptions.GetFilterExpression().Compile());
+    }
 
     #endregion
 
@@ -294,7 +301,8 @@ public static class QueryExtensions
     /// <param name="includeOptions">Include models options</param>
     /// <typeparam name="TEntity">Query source type</typeparam>
     /// <returns>Queryable source</returns>
-    public static IQueryable<TEntity> ApplyIncluding<TEntity>(this IQueryable<TEntity> source, IncludeOptions<TEntity> includeOptions) where TEntity : class, IEntity
+    public static IQueryable<TEntity> ApplyIncluding<TEntity>(this IQueryable<TEntity> source, IncludeOptions<TEntity> includeOptions)
+        where TEntity : class, IEntity
     {
         if (source == null || includeOptions == null)
             throw new ArgumentNullException();
@@ -307,10 +315,7 @@ public static class QueryExtensions
         includeOptions.IncludeModels = includeOptions.IncludeModels.Select(x => x.ToLower());
         var includeModels = typeof(TEntity).GetDirectChildEntities().Where(x => includeOptions.IncludeModels.Contains(x.Name.ToLower())).ToList();
 
-        includeModels.ForEach(x =>
-        {
-            source = source.Include(x.Name);
-        });
+        includeModels.ForEach(x => { source = source.Include(x.Name); });
 
         return source;
     }

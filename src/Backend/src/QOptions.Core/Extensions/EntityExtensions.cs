@@ -1,4 +1,4 @@
-﻿using QOptions.Models.Common;
+using QOptions.Models.Common;
 
 namespace QOptions.Extensions;
 
@@ -12,7 +12,11 @@ public static class EntityExtensions
     /// </summary>
     /// <param name="type">Type to check</param>
     /// <returns>True if given type is entity, otherwise false</returns>
-    public static bool IsEntity(this Type type) => type.InheritsOrImplements(typeof(IEntity));
+    /// <returns><see langword="true" /> if given type is entity; <see langword="false" /> otherwise.</returns>
+    public static bool IsEntity(this Type type)
+    {
+        return type.InheritsOrImplements(typeof(IEntity));
+    }
 
     /// <summary>
     /// Gets direct child entities from a type

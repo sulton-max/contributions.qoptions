@@ -15,7 +15,10 @@ public static class TypeExtensions
     /// </summary>
     /// <param name="type">Type to check</param>
     /// <returns>True if type is simple, otherwise false</returns>
-    public static bool IsSimpleType(this Type type) => type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime));
+    public static bool IsSimpleType(this Type type)
+    {
+        return type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime));
+    }
 
     /// <summary>
     /// Gets appropriate search method for a type
@@ -57,7 +60,9 @@ public static class TypeExtensions
 
         // Return string or parsed value
         if (type.Equals(typeof(string)))
+        {
             return filter.Value;
+        }
         else
         {
             // Create specific expression based on type
@@ -78,13 +83,5 @@ public static class TypeExtensions
             throw new ArgumentNullException();
 
         return type.GetProperties().Where(x => x.PropertyType.IsSimpleType() && Attribute.IsDefined(x, typeof(SearchablePropertyAttribute)));
-    }
-
-    public static IEnumerable<PropertyInfo> GetEncryptedProperties(this Type type)
-    {
-        if (type == null)
-            throw new ArgumentNullException();
-
-        return type.GetProperties().Where(x => x.PropertyType.Equals(typeof(string)) && Attribute.IsDefined(x, typeof(EncryptedPropertyAttribute)));
     }
 }

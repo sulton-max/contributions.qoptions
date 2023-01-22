@@ -25,5 +25,4 @@ public interface IQueryOptions<TSource> where TSource : class
     /// Calculated pagination options
     /// </summary>
     PaginationOptions PaginationOptions { get; set; }
-
 }
