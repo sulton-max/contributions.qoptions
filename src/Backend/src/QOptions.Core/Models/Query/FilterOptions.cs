@@ -1,25 +1,23 @@
-﻿namespace QOptions.Models.Query;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-/// <summary>
-/// Represents filtering options
-/// </summary>
-/// <typeparam name="TSource"></typeparam>
-public class FilterOptions<TSource> where TSource : class
+namespace QOptions.Core.Models.Query
 {
-    public FilterOptions(ICollection<QueryFilter> filters)
+    /// <summary>
+    /// Represents filtering options
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    public class FilterOptions<TModel> where TModel : class
     {
-        Filters = filters;
-    }
+        public FilterOptions() => (Filters) = new List<QueryFilter>();
 
-    public FilterOptions()
-    {
-        Filters = new List<QueryFilter>();
-    }
+        public FilterOptions(IEnumerable<QueryFilter> filters) => (Filters) = filters.ToList();
 
-    public IEnumerable<QueryFilter> Filters { get; set; }
+        public List<QueryFilter> Filters { get; set; }
 
-    public QueryFilter? this[string key]
-    {
-        get { return Filters.FirstOrDefault(x => x.Key == key); }
+        public QueryFilter this[string key]
+        {
+            get { return Filters.FirstOrDefault(x => x.Key == key); }
+        }
     }
 }

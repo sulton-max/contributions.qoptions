@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QOptions", "src\QOptions.Core\QOptions.csproj", "{3900A7F7-CA46-47CB-B4A3-1E4C1335270C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QOptions.Core", "src\QOptions.Core\QOptions.Core.csproj", "{3900A7F7-CA46-47CB-B4A3-1E4C1335270C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QOptions.Primitive", "src\QOptions.Primitive\QOptions.Primitive.csproj", "{335E41BC-290F-4581-8E04-78C6C5AEEC70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QOptions.Relational", "src\QOptions.Relational\QOptions.Relational.csproj", "{E654A5C9-2C3B-4038-9B46-D13FF2CC783B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{3900A7F7-CA46-47CB-B4A3-1E4C1335270C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3900A7F7-CA46-47CB-B4A3-1E4C1335270C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3900A7F7-CA46-47CB-B4A3-1E4C1335270C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335E41BC-290F-4581-8E04-78C6C5AEEC70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335E41BC-290F-4581-8E04-78C6C5AEEC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335E41BC-290F-4581-8E04-78C6C5AEEC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335E41BC-290F-4581-8E04-78C6C5AEEC70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E654A5C9-2C3B-4038-9B46-D13FF2CC783B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E654A5C9-2C3B-4038-9B46-D13FF2CC783B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E654A5C9-2C3B-4038-9B46-D13FF2CC783B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E654A5C9-2C3B-4038-9B46-D13FF2CC783B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

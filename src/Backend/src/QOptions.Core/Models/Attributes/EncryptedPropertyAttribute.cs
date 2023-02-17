@@ -1,7 +1,9 @@
-﻿namespace QOptions.Models.Attributes;
+﻿using System;
 
-[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-public class EncryptedPropertyAttribute : Attribute
+namespace QOptions.Core.Models.Attributes
 {
-
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class EncryptedPropertyAttribute : Attribute
+    {
+    }
 }

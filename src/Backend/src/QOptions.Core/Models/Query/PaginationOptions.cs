@@ -1,46 +1,41 @@
-﻿namespace QOptions.Models.Query;
+﻿using System;
 
-/// <summary>
-/// Represents pagination options
-/// </summary>
-public class PaginationOptions
+namespace QOptions.Core.Models.Query
 {
-    private int _pageSize;
-    private int _pageToken;
-
-    public PaginationOptions(int pageSize, int pageToken)
-    {
-        PageSize = pageSize;
-        PageToken = pageToken;
-    }
-
     /// <summary>
-    /// Current page size
+    /// Represents pagination options
     /// </summary>
-    /// <exception cref="ArgumentException">If value is invalid</exception>
-    public int PageSize
+    public class PaginationOptions
     {
-        get => _pageSize;
-        set
+        private int _pageSize;
+        private int _pageToken;
+
+        public PaginationOptions(int pageSize, int pageToken) => (PageSize, PageToken) = (pageSize, pageToken);
+
+        /// <summary>
+        /// Current page size
+        /// </summary>
+        /// <exception cref="ArgumentException">If value is invalid</exception>
+        public int PageSize
         {
-            if (value <= 0)
-                throw new ArgumentException();
-            _pageSize = value;
+            get => _pageSize;
+            set
+            {
+                _pageSize = value <= 0 ? 20 : value;
+            }
         }
-    }
 
-    /// <summary>
-    /// Current page token
-    /// </summary>
-    /// <exception cref="ArgumentException">If value is invalid</exception>
-    public int PageToken
-    {
-        get => _pageToken;
-        set
+        /// <summary>
+        /// Current page token
+        /// </summary>
+        /// <exception cref="ArgumentException">If value is invalid</exception>
+        public int PageToken
         {
-            if (value <= 0)
-                throw new ArgumentException();
-            _pageToken = value;
+            get => _pageToken;
+            set
+            {
+                _pageToken = value <= 0 ? 1 : value;
+            }
         }
     }
 }

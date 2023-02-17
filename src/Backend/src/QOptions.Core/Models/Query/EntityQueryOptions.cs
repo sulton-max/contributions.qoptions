@@ -1,12 +1,13 @@
-﻿using QOptions.Models.Common;
+﻿using QOptions.Core.Models.Common;
 
-namespace QOptions.Models.Query;
-
-/// <summary>
-/// Represents queryable entities source query options
-/// </summary>
-/// <typeparam name="TEntity"></typeparam>
-public class EntityQueryOptions<TEntity> : QueryOptions<TEntity>, IEntityQueryOptions<TEntity> where TEntity : class, IEntity
+namespace QOptions.Core.Models.Query
 {
-    public IncludeOptions<TEntity>? IncludeOptions { get; set; }
+    /// <summary>
+    /// Represents queryable entities source query options
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    public class EntityQueryOptions<TEntity> : QueryOptions<TEntity>, IEntityQueryOptions<TEntity> where TEntity : class, IQueryableEntity
+    {
+        public IncludeOptions<TEntity> IncludeOptions { get; set; }
+    }
 }

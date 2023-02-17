@@ -1,17 +1,23 @@
-﻿namespace QOptions.Models.Query;
+﻿using System;
 
-/// <summary>
-/// Represents search options
-/// </summary>
-public class SearchOptions<TSource> where TSource : class
+namespace QOptions.Core.Models.Query
 {
     /// <summary>
-    /// Search keyword
+    /// Represents search options
     /// </summary>
-    public string Keyword { get; set; } = null!;
+    public class SearchOptions<TModel> where TModel : class
+    {
+        public SearchOptions(string keyword, bool includeChildren) =>
+            (Keyword, IncludeChildren) = (keyword ?? throw new ArgumentException(), includeChildren);
 
-    /// <summary>
-    /// Determines whether to search from direct children
-    /// </summary>
-    public bool IncludeChildren { get; set; }
+        /// <summary>
+        /// Search keyword
+        /// </summary>
+        public string Keyword { get; }
+
+        /// <summary>
+        /// Determines whether to search from direct children
+        /// </summary>
+        public bool IncludeChildren { get; }
+    }
 }

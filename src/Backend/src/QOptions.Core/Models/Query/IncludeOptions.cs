@@ -1,17 +1,24 @@
-﻿using QOptions.Models.Common;
+﻿using System.Collections.Generic;
+using QOptions.Core.Models.Common;
 
-namespace QOptions.Models.Query;
-
-/// <summary>
-/// Represents including options
-/// </summary>
-/// <typeparam name="TEntity"></typeparam>
-public class IncludeOptions<TEntity> where TEntity : class, IEntity
+namespace QOptions.Core.Models.Query
 {
-    public IncludeOptions()
+    /// <summary>
+    /// Represents including options
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    public class IncludeOptions<TEntity> where TEntity : class, IQueryableEntity
     {
-        IncludeModels = new List<string>();
-    }
+        public IncludeOptions()
+        {
+            IncludeModels = new List<string>();
+        }
+        
+        public IncludeOptions(List<string> includeModels)
+        {
+            IncludeModels = includeModels;
+        }
 
-    public IEnumerable<string> IncludeModels { get; set; }
+        public List<string> IncludeModels { get; set; }
+    }
 }
