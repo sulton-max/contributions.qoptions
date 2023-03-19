@@ -21,7 +21,7 @@ namespace QOptions.Core.Extensions
         /// <returns>True if type is simple, otherwise false</returns>
         public static bool IsSimpleType(this Type type)
         {
-            return type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime));
+            return type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime)) || type.Equals(typeof(DateTime?));
         }
 
         /// <summary>

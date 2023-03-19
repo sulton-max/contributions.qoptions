@@ -60,7 +60,7 @@ namespace QOptions.Core.Extensions
             options.SearchOptions = new SearchOptions<TModel>(keyword, includeChildren);
             return options;
         }
-        
+
         /// <summary>
         /// Adds search options to given query options
         /// </summary>
@@ -70,8 +70,11 @@ namespace QOptions.Core.Extensions
         /// <typeparam name="TEntity">Query source type</typeparam>
         /// <returns>Updated query options</returns>
         /// <exception cref="ArgumentNullException">If given options is null</exception>
-        public static IEntityQueryOptions<TEntity> AddSearch<TEntity>(this IEntityQueryOptions<TEntity> options, string keyword, bool includeChildren = false)
-            where TEntity : class, IQueryableEntity
+        public static IEntityQueryOptions<TEntity> AddSearch<TEntity>(
+            this IEntityQueryOptions<TEntity> options,
+            string keyword,
+            bool includeChildren = false
+        ) where TEntity : class, IQueryableEntity
         {
             if (options == null)
                 throw new ArgumentNullException();
@@ -99,7 +102,7 @@ namespace QOptions.Core.Extensions
             object value
         ) where TEntity : class, IQueryableEntity
         {
-            if (options == null || keySelector == null || value == null)
+            if (options == null || keySelector == null)
                 throw new ArgumentNullException();
 
             // Get property name
@@ -108,7 +111,7 @@ namespace QOptions.Core.Extensions
 
             // TODO : Check value to property type
             options.FilterOptions = options.FilterOptions ?? new FilterOptions<TEntity>();
-            options.FilterOptions.Filters.Add(new QueryFilter(propertyName, value.ToString()));
+            options.FilterOptions.Filters.Add(new QueryFilter(propertyName, value?.ToString()));
 
             return options;
         }
@@ -156,7 +159,7 @@ namespace QOptions.Core.Extensions
         public static IEntityQueryOptions<TEntity> AddInclude<TEntity>(
             this IEntityQueryOptions<TEntity> options,
             Expression<Func<TEntity, IQueryableEntity>> keySelector
-        ) where TEntity : class, IQueryableEntity 
+        ) where TEntity : class, IQueryableEntity
         {
             if (options == null || keySelector == null)
                 throw new ArgumentNullException();
@@ -171,7 +174,7 @@ namespace QOptions.Core.Extensions
 
             return options;
         }
-        
+
         /// <summary>
         /// Adds include options to given query options
         /// </summary>
@@ -184,7 +187,7 @@ namespace QOptions.Core.Extensions
         public static IEntityQueryOptions<TEntity> AddInclude<TEntity>(
             this IEntityQueryOptions<TEntity> options,
             Expression<Func<TEntity, IEnumerable<IQueryableEntity>>> keySelector
-        ) where TEntity : class, IQueryableEntity 
+        ) where TEntity : class, IQueryableEntity
         {
             if (options == null || keySelector == null)
                 throw new ArgumentNullException();
