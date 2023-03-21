@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using QOptions.Core.Extensions;
 using QOptions.Core.Models.Query;
 
@@ -36,10 +37,10 @@ namespace QOptions.Primitive.Extensions
 
             if (queryOptions.SortOptions != null)
                 result = result.ApplySort(queryOptions.SortOptions);
-            
+
             if (queryOptions.PaginationOptions != null)
                 result = result.ApplyPagination(queryOptions.PaginationOptions);
-            
+
             return result;
         }
 
@@ -65,7 +66,7 @@ namespace QOptions.Primitive.Extensions
 
             if (queryOptions.SortOptions != null)
                 result = result.ApplySort(queryOptions.SortOptions);
-            
+
             if (queryOptions.PaginationOptions != null)
                 result = result.ApplyPagination(queryOptions.PaginationOptions);
 
@@ -119,7 +120,8 @@ namespace QOptions.Primitive.Extensions
         /// <param name="searchOptions">Search options</param>
         /// <typeparam name="TModel">Query source type</typeparam>
         /// <returns>Queryable source</returns>
-        public static IEnumerable<TModel> ApplySearch<TModel>(this IEnumerable<TModel> source, SearchOptions<TModel> searchOptions) where TModel : class
+        public static IEnumerable<TModel> ApplySearch<TModel>(this IEnumerable<TModel> source, SearchOptions<TModel> searchOptions)
+            where TModel : class
         {
             if (source == null || searchOptions == null)
                 throw new ArgumentException();
@@ -171,12 +173,14 @@ namespace QOptions.Primitive.Extensions
                     var multiChoicePredicates = x.Select(x =>
                         {
                             // Create predicate expression
-                            var property = properties.First(y => y.Name.ToLower() == x.Key.ToLower());
+                            var property = properties.First(y => string.Equals(y.Name, x.Key, StringComparison.CurrentCultureIgnoreCase));
                             var member = Expression.PropertyOrField(parameter, x.Key);
 
                             // Create specific expression based on type
                             var compareMethod = property.PropertyType.GetCompareMethod();
-                            var argument = Expression.Convert(Expression.Constant(x.GetValue(property.PropertyType)), property.PropertyType);
+                            var expectedType = compareMethod.GetParameters().First();
+
+                            var argument = Expression.Convert(Expression.Constant(x.GetValue(property.PropertyType)), expectedType.ParameterType);
                             var methodCaller = Expression.Call(member, compareMethod, argument);
                             return Expression.Lambda<Func<TModel, bool>>(methodCaller, parameter);
                         })
@@ -201,7 +205,8 @@ namespace QOptions.Primitive.Extensions
         /// <param name="filterOptions">Filter options</param>
         /// <typeparam name="TModel">Query source type</typeparam>
         /// <returns>Queryable source</returns>
-        public static IEnumerable<TModel> ApplyFilter<TModel>(this IEnumerable<TModel> source, FilterOptions<TModel> filterOptions) where TModel : class
+        public static IEnumerable<TModel> ApplyFilter<TModel>(this IEnumerable<TModel> source, FilterOptions<TModel> filterOptions)
+            where TModel : class
         {
             return source.Where(filterOptions.GetFilterExpression().Compile());
         }

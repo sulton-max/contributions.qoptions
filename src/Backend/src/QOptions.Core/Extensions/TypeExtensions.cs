@@ -21,7 +21,13 @@ namespace QOptions.Core.Extensions
         /// <returns>True if type is simple, otherwise false</returns>
         public static bool IsSimpleType(this Type type)
         {
-            return type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime)) || type.Equals(typeof(DateTime?));
+            return type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime)) || type.Equals(typeof(DateTime?)) ||
+                   type.Equals(typeof(bool?));
+        }
+
+        public static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) || Nullable.GetUnderlyingType(type) != null;
         }
 
         /// <summary>
@@ -71,12 +77,13 @@ namespace QOptions.Core.Extensions
             {
                 // Create specific expression based on type
                 var parameter = Expression.Parameter(typeof(string));
-                var parseMethod = type.GetMethod("Parse", new[] { typeof(string) }) ?? throw new InvalidOperationException("Method not found");
+                var underlyingType = Nullable.GetUnderlyingType(type) ?? type;
+                var parseMethod = underlyingType.GetMethod("Parse", new[] { typeof(string) }) ??
+                                  throw new InvalidOperationException($"Method not found to parse value for type {type.FullName}");
                 var argument = Expression.Constant(filter.Value);
                 var methodCaller = Expression.Call(parseMethod, argument);
                 var returnConverter = Expression.Convert(methodCaller, typeof(object));
                 var function = Expression.Lambda<Func<string, object>>(returnConverter, parameter).Compile();
-
                 return function.Invoke(filter.Value);
             }
         }
