@@ -21,14 +21,13 @@ namespace QOptions.Core.Extensions
         /// <returns>True if type is simple, otherwise false</returns>
         public static bool IsSimpleType(this Type type)
         {
-            return type.IsPrimitive || type.Equals(typeof(string)) || type.Equals(typeof(DateTime)) || type.Equals(typeof(DateTime?)) ||
-                   type.Equals(typeof(bool?));
+            return type.IsPrimitive || type == typeof(string) || type == typeof(DateTime) || type == typeof(DateTime?) || type == typeof(bool?);
         }
 
-        public static bool IsNullable(this Type type)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) || Nullable.GetUnderlyingType(type) != null;
-        }
+        // public static bool IsNullable(this Type type)
+        // {
+        //     return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>) || Nullable.GetUnderlyingType(type) != null;
+        // }
 
         /// <summary>
         /// Gets appropriate search method for a type
@@ -69,7 +68,7 @@ namespace QOptions.Core.Extensions
                 throw new ArgumentException("Not a primitive type");
 
             // Return string or parsed value
-            if (type.Equals(typeof(string)))
+            if (type == typeof(string))
             {
                 return filter.Value;
             }
@@ -101,11 +100,11 @@ namespace QOptions.Core.Extensions
             if (type == null)
                 throw new ArgumentNullException();
 
-            return type.GetProperties()
-                .Where(x => x.PropertyType.Equals(typeof(string)) && Attribute.IsDefined(x, typeof(EncryptedPropertyAttribute)));
+
+            return type.GetProperties().Where(x => x.PropertyType == typeof(string) && Attribute.IsDefined(x, typeof(EncryptedPropertyAttribute)));
         }
 
-        public static bool IsCollection(this Type type)
+        private static bool IsCollection(this Type type)
         {
             return type.GetInterfaces()
             .Any(x => new[]
@@ -116,12 +115,20 @@ namespace QOptions.Core.Extensions
             }.Contains(x.Name));
         }
 
-        public static IEnumerable<Type> GetCollectionUnderlyingType(this Type type)
+        private static IEnumerable<Type> GetCollectionUnderlyingType(this Type type)
         {
             if (null == type)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
 
             return type.GetGenericArguments().ToList();
+        }
+
+        public static Type GetUnderlyingType(Type type)
+        {
+            var underlyingType = type.IsCollection() ? type.GetCollectionUnderlyingType().First() : type;
+            underlyingType = Nullable.GetUnderlyingType(underlyingType) ?? underlyingType;
+
+            return underlyingType;
         }
     }
 }
