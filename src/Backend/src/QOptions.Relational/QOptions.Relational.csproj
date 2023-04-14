@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\QOptions.Core\QOptions.Core.csproj" />
       <ProjectReference Include="..\QOptions.Primitive\QOptions.Primitive.csproj" />
     </ItemGroup>
 

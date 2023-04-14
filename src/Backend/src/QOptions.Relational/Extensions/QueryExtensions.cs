@@ -20,13 +20,14 @@ namespace QOptions.Relational.Extensions
         /// <param name="source">Query source</param>
         /// <param name="queryOptions">Query options</param>
         /// <typeparam name="TEntity">Query source type</typeparam>
+        /// <exception cref="ArgumentNullException">If source or query options is null</exception>
         /// <returns>Queryable source</returns>
         public static IQueryable<TEntity> ApplyQuery<TEntity>(this IQueryable<TEntity> source, IEntityQueryOptions<TEntity> queryOptions)
             where TEntity : class, IQueryableEntity
         {
-            if (source == null || queryOptions == null)
-                throw new ArgumentNullException();
-
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(queryOptions);
+            
             var result = source;
 
             if (queryOptions.SearchOptions != null)
@@ -38,8 +39,7 @@ namespace QOptions.Relational.Extensions
             if (queryOptions.SortOptions != null)
                 result = result.ApplySort(queryOptions.SortOptions);
 
-            if (queryOptions.PaginationOptions != null)
-                result = result.ApplyPagination(queryOptions.PaginationOptions);
+            result = result.ApplyPagination(queryOptions.PaginationOptions);
 
             return result;
         }
@@ -53,11 +53,11 @@ namespace QOptions.Relational.Extensions
         /// </summary>
         /// <param name="searchOptions">Filters</param>
         /// <typeparam name="TModel">Query source type</typeparam>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <returns>Queryable source</returns>
         public static Expression<Func<TModel, bool>> GetSearchExpression<TModel>(this SearchOptions<TModel> searchOptions) where TModel : class
         {
-            if (searchOptions == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(searchOptions);
 
             // Get the properties type of entity
             var parameter = Expression.Parameter(typeof(TModel));
@@ -154,8 +154,7 @@ namespace QOptions.Relational.Extensions
         /// <returns>Queryable source</returns>
         public static Expression<Func<TModel, bool>> GetFilterExpression<TModel>(this FilterOptions<TModel> filterOptions) where TModel : class
         {
-            if (filterOptions == null)
-                throw new ArgumentNullException();
+            ArgumentNullException.ThrowIfNull(filterOptions);
 
             // Get the properties type  of entity
             var parameter = Expression.Parameter(typeof(TModel));
