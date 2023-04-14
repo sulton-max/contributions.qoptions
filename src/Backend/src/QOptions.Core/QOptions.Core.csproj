@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageId>MaxDev.$(AssemblyName)</PackageId>
+        <Title>$(AssemblyName)</Title>
+        <Authors>MaxDev</Authors>
+        <Company>$(Authors)</Company>
+        <Product>Query Options Core</Product>
+        <Nullable>enable</Nullable>
+        <Description>Query Options Core is a simple and lightweight extesnsion for IQueryable&lt;T&gt; and IEnumerable&lt;T&gt; that makes resource query easier by using expressions, reflection, attributes and LINQ
+
+Commonly used types
+- QueryOptions&lt;TModel&gt;
+
+</Description>
+        <PackageIcon>QOptions.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/sulton-max/contributions.qoptions</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>array filter, expressions, predicate, filtering, searching, ordering, pagination</PackageTags>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Version>1.0.0</Version>
+        <TargetFramework>net7.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>C:\Users\MAX\Utilities\PrivatePackages</PackageOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\..\..\QOptions.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\..\..\..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
+    </ItemGroup>
+
+</Project>
